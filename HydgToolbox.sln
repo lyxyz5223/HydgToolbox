@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HydgToolbox", "HydgToolbox.vcxproj", "{94924ABD-376F-3639-B6AB-2D2932DB7015}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		MinSizeRel|x64 = MinSizeRel|x64
+		Release|x64 = Release|x64
+		RelWithDebInfo|x64 = RelWithDebInfo|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.Debug|x64.ActiveCfg = Debug|x64
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.Debug|x64.Build.0 = Debug|x64
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.Release|x64.ActiveCfg = Release|x64
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.Release|x64.Build.0 = Release|x64
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{94924ABD-376F-3639-B6AB-2D2932DB7015}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F4427580-2644-47E2-A376-44237AEFD0C8}
+	EndGlobalSection
+EndGlobal

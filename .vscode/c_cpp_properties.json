@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/HydgToolbox/x64/Debug/uic",
+                "${workspaceFolder}/libs/ZeroMQ/include",
+                "${workspaceFolder}/libs/jsoncpp-1.9.6/include",
+                "${workspaceFolder}/libs/spdlog/include",
+                "D:\\Qt\\6.7.2\\mingw_64\\include",
+                "D:\\Qt\\6.7.2\\mingw_64\\include\\QtCore",
+                "D:\\Qt\\6.7.2\\mingw_64\\include\\QtGui",
+                "D:\\Qt\\6.7.2\\mingw_64\\include\\QtWidgets"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerPath": "D:/Softwares/mingw64/bin/g++.exe"
+        }
+    ],
+    "version": 4
+}

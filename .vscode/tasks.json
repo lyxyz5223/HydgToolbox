@@ -1,0 +1,25 @@
+{
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "CMake",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "CMake构建"
+        }
+    ],
+    "version": "2.0.0"
+}

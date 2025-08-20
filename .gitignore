@@ -1,0 +1,12 @@
+### Build ###
+build/
+
+### Debug ###
+Debug/
+
+### Compile Data ###
+HydgToolbox/
+
+### Third-party libraries ###
+libs/
+/*.dll
