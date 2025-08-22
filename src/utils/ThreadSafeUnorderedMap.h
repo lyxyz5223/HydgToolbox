@@ -38,10 +38,13 @@ public:
         mutex_.unlock();
     }
 
-    auto operator[](const K &key) const
-    {
-        std::lock_guard<std::mutex> lock(mutex_);
-        return map_[key];
+    //auto& operator[](const K &key) {
+    //    std::lock_guard<std::mutex> lock(mutex_);
+    //    return map_[key];
+    //}
+    auto& safe_get(const K& key) {
+      std::lock_guard<std::mutex> lock(mutex_);
+      return map_[key];
     }
     THREAD_SAFE_CLASS_FUNCTION(insert, (const std::pair<K, V> &value), (value))
     THREAD_SAFE_CLASS_FUNCTION(insert, (K &&key, V &&value), (std::move(key), std::move(value)))

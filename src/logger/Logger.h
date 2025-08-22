@@ -11,6 +11,17 @@
 #include <sstream>
 #include <string>
 #include <functional>
+// 日志打印等级
+enum class LogLevel: int{
+  trace = SPDLOG_LEVEL_TRACE,
+  debug = SPDLOG_LEVEL_DEBUG,
+  info = SPDLOG_LEVEL_INFO,
+  warn = SPDLOG_LEVEL_WARN,
+  err = SPDLOG_LEVEL_ERROR,
+  critical = SPDLOG_LEVEL_CRITICAL,
+  off = SPDLOG_LEVEL_OFF,
+  n_levels
+};
 
 class LoggerInterface; // 前置声明
 class Logger;
@@ -44,6 +55,7 @@ class LoggerInterface
 {
 public:
     virtual ~LoggerInterface() = default;
+    virtual void setLevel(LogLevel level) = 0;
     virtual LoggerStream trace() = 0;
     virtual LoggerStream info() = 0;
     virtual LoggerStream warn() = 0;
@@ -94,6 +106,10 @@ private:
 public:
     Logger(const std::string &name);
     ~Logger();
+
+    void setLevel(LogLevel level) override {
+      spdlog::set_level(static_cast<spdlog::level::level_enum>(level));
+    }
     // 流式日志打印
     LoggerStream trace() override;
     LoggerStream info() override;

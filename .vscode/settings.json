@@ -74,6 +74,7 @@
     "complex": "cpp",
     "expected": "cpp",
     "regex": "cpp",
-    "source_location": "cpp"
+    "source_location": "cpp",
+    "filesystem": "cpp"
   }
 }

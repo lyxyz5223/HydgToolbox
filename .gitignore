@@ -1,12 +1,23 @@
+### VS tmps ###
+.vs/
+
+### yarn ###
+.yarn/
+
 ### Build ###
 build/
+/out/
 
 ### Debug ###
 Debug/
+/HydgToolbox.dir/
 
 ### Compile Data ###
-HydgToolbox/
+/HydgToolbox/
 
 ### Third-party libraries ###
 libs/
 /*.dll
+
+### Test Plugins ###
+# /plugins/

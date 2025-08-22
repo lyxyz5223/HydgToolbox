@@ -4,15 +4,6 @@
 #include <functional>
 #include <vector>
 
-struct PublishedEvent
-{
-    std::string publisherId;  // 发布者id
-    std::string eventName;    // 事件名称
-    std::string eventContent; // 事件内容
-};
-
-
-
 // struct Subscriber
 // {
 //     std::string subscriberId;

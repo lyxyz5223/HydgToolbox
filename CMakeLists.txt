@@ -23,11 +23,14 @@ include_directories(
 
 # 源文件列表
 set(SOURCES
+    # jsoncpp
+    libs/jsoncpp-1.9.6/dist/jsoncpp.cpp
     src/logger/Logger.cpp
     src/config/GlobalConfig.cpp
     src/utils/StringProcess.cpp
     src/event/ZeroMQEventServer.cpp
     src/event/PubSubEventBus.cpp
+    src/plugin/PluginController.cpp
     src/plugin/PluginManager.cpp
     src/toolbox/HydgToolbox.cpp
     src/main.cpp
@@ -41,8 +44,8 @@ set(HEADERS
     src/utils/ThreadSafeUnorderedMap.h
     src/event/ZeroMQEventServer.h
     src/event/PubSubEventBus.h
+    src/plugin/PluginController.h
     src/plugin/PluginManager.h
-    src/plugin/HydgPluginInterface.h
     src/toolbox/HydgToolbox.h
 )
 
@@ -72,7 +75,7 @@ target_link_libraries(HydgToolbox PRIVATE
 )
 
 # 如果 jsoncpp 是源码编译，可以直接添加 src 目录
-include_directories(libs/jsoncpp-1.9.6/include)
+include_directories(libs/jsoncpp-1.9.6/dist)
 # add_subdirectory(libs/jsoncpp-1.9.6)
 # target_link_libraries(HydgToolbox PRIVATE jsoncpp_lib)
 
@@ -85,3 +88,5 @@ include_directories(libs/spdlog/include)
 # 资源文件（如图标）
 # 可用 install 命令安装到输出目录
 install(FILES src/HydgToolbox.ico DESTINATION .)
+
+

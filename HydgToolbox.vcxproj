@@ -371,32 +371,44 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\HydgPluginInterface.h" />
-    <ClInclude Include="src\HydgToolbox.h" />
-    <ClInclude Include="src\PluginManager.h" />
-    <ClInclude Include="src\PubSubEventBus.h" />
-    <ClInclude Include="src\StringProcess.h" />
-    <ClInclude Include="src\ZeroMQEventServer.h" />
-    <ClInclude Include="src\zmq.hpp" />
-    <ClInclude Include="src\zmq_addon.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\HydgToolbox.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\PluginManager.cpp" />
-    <ClCompile Include="src\PubSubEventBus.cpp" />
-    <ClCompile Include="src\StringProcess.cpp" />
-    <ClCompile Include="src\ZeroMQEventServer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="src\HydgToolbox.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\HydgToolbox.qrc" />
-    <None Include="src\HydgToolbox.ui" />
+    <None Include="src\toolbox\HydgToolbox.ui" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\HydgToolbox.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="libs\jsoncpp-1.9.6\dist\jsoncpp.cpp" />
+    <ClCompile Include="src\config\GlobalConfig.cpp" />
+    <ClCompile Include="src\event\PubSubEventBus.cpp" />
+    <ClCompile Include="src\event\ZeroMQEventServer.cpp" />
+    <ClCompile Include="src\logger\Logger.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\plugin\PluginController.cpp" />
+    <ClCompile Include="src\plugin\PluginManager.cpp" />
+    <ClCompile Include="src\toolbox\HydgToolbox.cpp" />
+    <ClCompile Include="src\utils\StringProcess.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\config\GlobalConfig.h" />
+    <ClInclude Include="src\event\EventType.h" />
+    <ClInclude Include="src\event\PubSubEventBus.h" />
+    <ClInclude Include="src\event\ZeroMQEventServer.h" />
+    <ClInclude Include="src\event\zmq.hpp" />
+    <ClInclude Include="src\event\zmq_addon.hpp" />
+    <ClInclude Include="src\logger\Logger.h" />
+    <ClInclude Include="src\plugin\HydgPluginInterface.h" />
+    <ClInclude Include="src\plugin\PluginController.h" />
+    <ClInclude Include="src\plugin\PluginManager.h" />
+    <ClInclude Include="src\toolbox\HydgToolbox.h" />
+    <ClInclude Include="src\utils\StringProcess.h" />
+    <ClInclude Include="src\utils\ThreadSafeUnorderedMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
