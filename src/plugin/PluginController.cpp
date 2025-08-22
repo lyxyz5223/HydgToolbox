@@ -17,8 +17,9 @@ PluginController::~PluginController()
     DLL_CLOSE(handle);
 }
 
-void PluginController::load()
+bool PluginController::load()
 {
+  bool result = true;
   // 加载插件逻辑
   if (std::filesystem::exists(pluginPath))
   {
@@ -32,6 +33,7 @@ void PluginController::load()
         logger.trace("Plugin function 'create' loaded successfully.");
       } else {
         logger.error("Plugin function 'create' not found.");
+        result = false;
       }
       auto destroyFunc = (void (*)(HydgPlugin *))DLL_SYM(handle, "destroy");
       if (destroyFunc) {
@@ -39,13 +41,15 @@ void PluginController::load()
         logger.trace("Plugin function 'destroy' loaded successfully.");
       } else {
         logger.error("Plugin function 'destroy' not found.");
+        result = false;
       }
     }
   }
+  return result;
 }
 
 
-void PluginController::create()
+bool PluginController::create()
 {
   if (createPluginFunc) {
     pluginObj = createPluginFunc();
@@ -61,30 +65,39 @@ void PluginController::create()
     }
     else {
       logger.error("Failed to create plugin.");
+      return false;
     }
   }
   else {
     logger.error("Create function not set.");
+    return false;
   }
+  return true;
 }
 
-void PluginController::run()
+bool PluginController::run()
 {
   if (pluginObj) {
     logger.info("Running plugin: {}", pluginInfo.name);
     // std::thread([this]() {
       pluginObj->main(&context);
     // }).detach();
+    return true;
   }
   else {
     logger.error("Plugin is not created.");
+    return false;
   }
 }
 
-void PluginController::destroy()
+bool PluginController::destroy()
 {
   if (destroyPluginFunc && pluginObj) {
-    pluginObj->shutdown();
+    bool result = pluginObj->shutdown();
+    if (!result) {
+      logger.info("Plugin cancel shutdown.");
+      return false; // 如果关闭失败（取消关闭），返回false
+    }
     // 处理Qt事件，防止因提前卸载dll导致Qt事件机制报错
     QCoreApplication::processEvents(); // 无效
     destroyPluginFunc(pluginObj);
@@ -93,6 +106,7 @@ void PluginController::destroy()
   } else {
     logger.error("Destroy function not set or plugin is not created.");
   }
+  return true; // 成功销毁插件
 }
 
 HydgPluginInfo PluginController::getInfo() const

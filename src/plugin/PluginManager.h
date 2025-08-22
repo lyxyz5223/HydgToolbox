@@ -20,7 +20,11 @@ private:
   ~PluginManager();
   void scanPlugins();
   void createAndRunPlugins(const PluginContext& context);
-  void destroyPlugins();
+  /**
+   * 销毁所有插件
+   * @return true表示成功销毁，false表示有插件取消shutdown
+   */
+  bool destroyPlugins();
   
 private:
 };

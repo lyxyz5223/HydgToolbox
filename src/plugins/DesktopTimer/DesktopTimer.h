@@ -15,6 +15,8 @@ private:
 public:
   DesktopTimer(QWidget *parent = nullptr, const PluginContext *context = nullptr);
   ~DesktopTimer();
+protected:
+  void closeEvent(QCloseEvent *event) override;
 private slots:
   void updateTime();
 };

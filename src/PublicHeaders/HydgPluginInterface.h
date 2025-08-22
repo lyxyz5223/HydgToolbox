@@ -29,31 +29,31 @@ public:
      * 获取插件id(唯一)
      * @return 插件id
      */
-    virtual const char* getId() const = 0;
+    virtual const char* getId() = 0;
 
     /**
      * 获取插件名称
      * @return 插件名称
      */
-    virtual const char* getName() const = 0;
+    virtual const char* getName() = 0;
 
     /**
      * 获取插件版本
      * @return 插件版本
      */
-    virtual const char* getVersion() const = 0;
+    virtual const char* getVersion() = 0;
 
     /**
      * 获取插件作者
      * @return 插件作者
      */
-    virtual const char* getAuthor() const = 0;
+    virtual const char* getAuthor() = 0;
 
     /**
      * 获取插件描述
      * @return 插件描述
      */
-    virtual const char* getDescription() const = 0;
+    virtual const char* getDescription() = 0;
 
     /**
      * 插件主入口函数，提供上下文菜单，当插件销毁的时候上下文将自动销毁
@@ -62,8 +62,9 @@ public:
 
     /**
      * 插件关闭函数，将会在插件的destroy之前调用
+     * @return 是否成功关闭插件，返回true表示成功，false表示失败，失败将会取消关闭工具箱
      */
-    virtual void shutdown() = 0;
+    virtual bool shutdown() = 0;
 
     /**
      * 插件接收事件函数

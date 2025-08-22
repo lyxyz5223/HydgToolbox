@@ -1,10 +1,9 @@
 #pragma once
-#ifndef LOGGER_H
-#define LOGGER_H
 #include <string>
 #include <memory>
 #include <spdlog/spdlog.h>
 #include <functional>
+#include <iostream>
 
 // 用于支持 << 流式传递打印日志
 // LoggerStream.h
@@ -31,6 +30,14 @@ class LoggerStream
 public:
     LoggerStream(LoggerInterface *logger, std::function<void(const std::string &)> log_func)
         : logger_(logger), log_func_(log_func) {}
+
+    // 允许移动
+    LoggerStream(LoggerStream &&) noexcept = default;
+    LoggerStream &operator=(LoggerStream &&) noexcept = default;
+
+    // 禁止拷贝
+    LoggerStream(const LoggerStream &) = delete;
+    LoggerStream &operator=(const LoggerStream &) = delete;
 
     template <typename T>
     LoggerStream &operator<<(const T &value)
@@ -157,5 +164,3 @@ private:
         (this->*func)(formatted_msg);
     }
 };
-
-#endif // LOGGER_H

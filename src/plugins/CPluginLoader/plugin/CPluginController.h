@@ -3,8 +3,9 @@
 #include <string>
 #include <filesystem>
 #include <functional>
-#include "../PublicHeaders/HydgPluginInterface.h"
-#include "../logger/Logger.h"
+#include "Logger.h"
+// #include "HydgPluginInterface.h"
+#include "CPlugin.h"
 #ifdef _WIN32
 #include <Windows.h>
 #define DLL_HANDLE HMODULE
@@ -38,29 +39,28 @@ struct HydgPluginInfo
  * 插件控制器，用于控制一个插件的生命周期，创建与销毁
  * @author lyxyz5223
  */
-class PluginController
+class CPluginController
 {
 private:
   // 日志
-  Logger logger;
+  Logger logger{"CPluginLoader CPluginController"};
   // 插件路径
   std::string pluginPath;
   // 插件信息
   HydgPluginInfo pluginInfo;
   DLL_HANDLE handle = nullptr;
-
-  std::function<HydgPlugin*()> createPluginFunc = nullptr;
-  std::function<void(HydgPlugin*)> destroyPluginFunc = nullptr;
-  HydgPlugin* pluginObj = nullptr;
   PluginContext context;
+  // 插件实例
+  CPlugin *cPlugin = nullptr;
+  // 加载函数的辅助函数，增强可复用性
+  template <typename Func>
+  Func loadFunction(const std::string &funcName);
 
 public:
-  PluginController(const std::string &pluginPathAndName, PluginContext context);
-  ~PluginController();
+  CPluginController(const std::string &pluginPathAndName, PluginContext context);
+  ~CPluginController();
   // 加载插件
   bool load();
-  // 创建插件
-  bool create();
   // 运行插件
   bool run();
   // 销毁插件

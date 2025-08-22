@@ -23,6 +23,14 @@ DesktopTimer::~DesktopTimer()
   // Qt会自动释放子控件
 }
 
+void DesktopTimer::closeEvent(QCloseEvent *event)
+{
+  if (timer && timer->isActive()) {
+    timer->stop();
+  }
+  QMainWindow::closeEvent(event);
+}
+
 void DesktopTimer::updateTime()
 {
   QString currentTime = QDateTime::currentDateTime().toString("hh:mm:ss");

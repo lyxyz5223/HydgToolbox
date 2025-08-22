@@ -10,7 +10,7 @@ PluginManager::PluginManager(const std::string &path)
 
 PluginManager::~PluginManager()
 {
-  destroyPlugins();
+  // destroyPlugins();
 }
 
 void PluginManager::scanPlugins()
@@ -33,27 +33,37 @@ void PluginManager::scanPlugins()
 void PluginManager::createAndRunPlugins(const PluginContext& context)
 {
   unsigned long long pluginCount = 0;
+  unsigned long long successCount = 0;
   // 创建并运行插件
   for (const auto &pluginFile : pluginFiles)
   {
     auto pluginController = std::make_unique<PluginController>(pluginFile, context);
-    pluginController->load();
-    pluginController->create();
-    pluginController->run();
+    if (pluginController->load()) {
+      if (pluginController->create()) {
+        if (pluginController->run()) {
+          successCount++;
+        }
+      }
+    }
     pluginsMap[pluginFile] = std::move(pluginController);
     pluginCount++;
   }
-  logger.info("All {} plugins created and running", pluginCount);
+  logger.info("All {} plugins with {} successfully loaded, created and run", pluginCount, successCount);
 }
 
-void PluginManager::destroyPlugins()
+bool PluginManager::destroyPlugins()
 {
   // 销毁所有插件
   for (auto &pair : pluginsMap)
   {
-    pair.second->destroy();
+    bool result = pair.second->destroy();
+    if (!result) {
+      logger.info("Plugin {} cancel shutdown, toolbox will not be closed.", pair.first);
+      return false; // 如果有插件取消关闭，返回false
+    }
     pair.second.reset();
   }
   pluginsMap.clear();
   logger.info("All plugins destroyed");
+  return true; // 成功销毁所有插件
 }

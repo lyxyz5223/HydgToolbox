@@ -34,7 +34,7 @@ public:
     pluginWindow->show();
   }
 
-  void shutdown() override
+  bool shutdown() override
   {
     if (pluginWindow) {
       pluginWindow->close();
@@ -42,25 +42,26 @@ public:
       delete pluginWindow; // 立即销毁
       pluginWindow = nullptr;
     }
+    return true;
   }
 
-  const char* getName() const override {
+  const char* getName() override {
     return "Desktop Timer Plugin";
   }
 
-  const char* getId() const override {
+  const char* getId() override {
     return "desktop_timer_plugin";
   }
 
-  const char* getVersion() const override {
+  const char* getVersion() override {
     return "1.0.0";
   }
 
-  const char* getAuthor() const override {
+  const char* getAuthor() override {
     return "lyxyz5223";
   }
 
-  const char* getDescription() const override {
+  const char* getDescription() override {
     return "A plugin to show desktop timer.";
   }
 };
