@@ -32,6 +32,7 @@ set(SOURCES
     src/event/PubSubEventBus.cpp
     src/plugin/PluginController.cpp
     src/plugin/PluginManager.cpp
+    src/toolbox/PluginListView.cpp
     src/toolbox/HydgToolbox.cpp
     src/main.cpp
 )
@@ -44,8 +45,11 @@ set(HEADERS
     src/utils/ThreadSafeUnorderedMap.h
     src/event/ZeroMQEventServer.h
     src/event/PubSubEventBus.h
+    src/plugin/HydgPluginInfo.h
     src/plugin/PluginController.h
     src/plugin/PluginManager.h
+    src/toolbox/PluginCardDelegate.h
+    src/toolbox/PluginListView.h
     src/toolbox/HydgToolbox.h
 )
 

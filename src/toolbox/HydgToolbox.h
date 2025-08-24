@@ -13,6 +13,10 @@ class HydgToolbox : public QMainWindow
 public:
     HydgToolbox(QWidget *parent = nullptr);
     ~HydgToolbox();
+
+public slots:
+    void handleRunPlugin(const QString &pluginFilePath);
+
 protected:
     void closeEvent(QCloseEvent *event) override;
 private:

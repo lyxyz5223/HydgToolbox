@@ -1,10 +1,8 @@
-<UI version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>HydgToolboxClass</class>
- <widget class="QMainWindow" name="HydgToolboxClass" >
-  <property name="objectName" >
-   <string notr="true">HydgToolboxClass</string>
-  </property>
-  <property name="geometry" >
+ <widget class="QMainWindow" name="HydgToolboxClass">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,17 +10,134 @@
     <height>400</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>HydgToolbox</string>
-  </property>  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QWidget" name="titleBarWidget" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="titleLabel">
+         <property name="text">
+          <string>HydgToolbox</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolButton_2">
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::ListRemove"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="toolButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::EditClear"/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="pluginLayout" stretch="1,5">
+      <item>
+       <layout class="QVBoxLayout" name="categoryListLayout">
+        <item>
+         <widget class="QLabel" name="categoryListViewTitleLabel">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>类别</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListView" name="categoryListView"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="pluginListLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>插件列表</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PluginListView" name="pluginListView"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PluginListView</class>
+   <extends>QListView</extends>
+   <header>pluginlistview.h</header>
+   <slots>
+    <signal>runPlugin(QString)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources>
-   <include location="HydgToolbox.qrc"/>
+  <include location="HydgToolbox.qrc"/>
  </resources>
- <connections/>
-</UI>
+ <connections>
+  <connection>
+   <sender>pluginListView</sender>
+   <signal>runPlugin(QString)</signal>
+   <receiver>HydgToolboxClass</receiver>
+   <slot>handleRunPlugin(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>287</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>53</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>handleRunPlugin(QString)</slot>
+ </slots>
+</ui>

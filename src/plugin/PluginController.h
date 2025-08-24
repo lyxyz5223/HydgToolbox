@@ -5,6 +5,7 @@
 #include <functional>
 #include "../PublicHeaders/HydgPluginInterface.h"
 #include "../logger/Logger.h"
+#include "HydgPluginInfo.h"
 #ifdef _WIN32
 #include <Windows.h>
 #define DLL_HANDLE HMODULE
@@ -19,20 +20,7 @@
 #define DLL_CLOSE dlclose
 #endif
 
-// 用于C++插件的信息结构体
-struct HydgPluginInfo
-{
-  std::string id;
-  std::string name;
-  std::string version;
-  std::string author;
-  std::string description;
-  HydgPluginInfo() = default; // 默认构造函数
-  // 防止结构体赋值不全
-  HydgPluginInfo(const std::string &id, const std::string &name, const std::string &version,
-                 const std::string &author, const std::string &description)
-      : id(id), name(name), version(version), author(author), description(description) {}
-};
+
 
 /**
  * 插件控制器，用于控制一个插件的生命周期，创建与销毁

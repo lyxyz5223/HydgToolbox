@@ -55,6 +55,7 @@ bool PluginController::create()
     pluginObj = createPluginFunc();
     if (pluginObj) {
       pluginInfo = {
+        pluginPath,
         pluginObj->getId(),
         pluginObj->getName(),
         pluginObj->getVersion(),

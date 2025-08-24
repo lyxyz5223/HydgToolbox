@@ -1,16 +1,23 @@
 #include "HydgToolbox.h"
 #include <QCloseEvent>
 #include "../config/GlobalConfig.h"
+#include "PluginListView.h"
 
 HydgToolbox::HydgToolbox(QWidget *parent)
     : QMainWindow(parent)
 {
-    ui.setupUi(this);
-    // 加载插件列表
-    //PluginManager pluginManager(GlobalConfig::PluginDirectory);
-    pluginManager = new PluginManager(GlobalConfig::PluginDirectory);
-    pluginManager->scanPlugins();
-    pluginManager->createAndRunPlugins(context);
+  ui.setupUi(this);
+  // 加载插件列表
+  //PluginManager pluginManager(GlobalConfig::PluginDirectory);
+  pluginManager = new PluginManager(GlobalConfig::PluginDirectory);
+  pluginManager->scanPlugins();
+  // pluginManager->createAndRunPlugins(context);
+  pluginManager->loadPlugins(context);
+  pluginManager->createPlugins();
+  auto pluginList = pluginManager->getPluginInfoList();
+  // 设置插件信息列表
+  ui.pluginListView->setPluginInfoList(pluginList);
+  
 }
 
 HydgToolbox::~HydgToolbox()
@@ -28,4 +35,12 @@ void HydgToolbox::closeEvent(QCloseEvent *event)
     }
   }
   QMainWindow::closeEvent(event);
+}
+
+void HydgToolbox::handleRunPlugin(const QString &pluginFilePath)
+{
+  if (pluginManager)
+  {
+    pluginManager->runPlugin(pluginFilePath.toStdString());
+  }
 }

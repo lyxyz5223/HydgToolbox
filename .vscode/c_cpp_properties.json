@@ -4,7 +4,7 @@
             "name": "Win32",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/HydgToolbox/x64/Debug/uic",
+                "${workspaceFolder}/build/HydgToolbox_autogen/include_Debug",
                 "${workspaceFolder}/libs/ZeroMQ/include",
                 "${workspaceFolder}/libs/jsoncpp-1.9.6/include",
                 "${workspaceFolder}/libs/spdlog/include",

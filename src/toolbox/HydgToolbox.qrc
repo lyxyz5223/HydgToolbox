@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="HydgToolbox">
+    <file>../../assets/svgs/iconoir--test-tube.svg</file>
+  </qresource>
+</RCC>

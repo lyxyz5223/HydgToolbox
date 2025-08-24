@@ -28,9 +28,8 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "CMake"
+            "preLaunchTask": "CMake",
+            "visualizerFile": "c:\\Users\\lyxyz5223\\AppData\\Roaming\\Code\\User\\workspaceStorage\\3f6f22f8973a89f1851d700dc6ebd0e7\\tonka3000.qtvsctools\\qt.natvis.xml"
         }
-
-
     ]
 }

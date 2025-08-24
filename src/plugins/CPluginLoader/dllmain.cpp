@@ -8,9 +8,9 @@ class CPluginLoader : public HydgPlugin
 {
 private:
   Logger logger{"CPluginLoader"};
-  const PluginContext *pluginContext;
+  const PluginContext *pluginContext = nullptr;
   // C插件管理器
-  CPluginManager *pluginManager;
+  CPluginManager *pluginManager = nullptr;
 
 public:
   CPluginLoader() {}
@@ -35,7 +35,9 @@ public:
   bool shutdown() override
   {
     // 插件关闭逻辑
-    return pluginManager->destroyPlugins(); // 销毁所有C插件
+    if (pluginManager)
+      return pluginManager->destroyPlugins(); // 销毁所有C插件
+    return true;
     // if (!result)
     //   return false; // 取消关闭
     // return true; // 正常关闭
