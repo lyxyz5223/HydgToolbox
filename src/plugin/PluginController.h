@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <string>
 #include <filesystem>
 #include <functional>
@@ -39,7 +40,8 @@ private:
 
   std::function<HydgPlugin*()> createPluginFunc = nullptr;
   std::function<void(HydgPlugin*)> destroyPluginFunc = nullptr;
-  HydgPlugin* pluginObj = nullptr;
+  std::vector<HydgPlugin*> pluginObjs; // 允许多次创建，存在多个插件实例
+  std::vector<unsigned long long> runningIdxes;
   PluginContext context;
 
 public:
@@ -47,11 +49,15 @@ public:
   ~PluginController();
   // 加载插件
   bool load();
-  // 创建插件
+  // 卸载插件
+  void unload();
+  // 创建插件实例
   bool create();
   // 运行插件
   bool run();
-  // 销毁插件
+  // 关闭插件
+  bool shutdown();
+  // 销毁插件实例
   bool destroy();
   // 获取插件信息，create之后才能获取
   HydgPluginInfo getInfo() const;

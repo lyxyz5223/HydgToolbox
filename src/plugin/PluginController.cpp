@@ -13,8 +13,7 @@ PluginController::PluginController(const std::string &pluginPathAndName, PluginC
 PluginController::~PluginController()
 {
   //this->destroy();
-  if (handle)
-    DLL_CLOSE(handle);
+  //this->unload();
 }
 
 bool PluginController::load()
@@ -48,19 +47,27 @@ bool PluginController::load()
   return result;
 }
 
+void PluginController::unload()
+{
+  if (handle)
+    DLL_CLOSE(handle);
+  handle = 0;
+}
 
 bool PluginController::create()
 {
   if (createPluginFunc) {
-    pluginObj = createPluginFunc();
-    if (pluginObj) {
+    pluginObjs.push_back(createPluginFunc());
+    if (pluginInfo.filePath.empty() && pluginObjs.size()) {
+      //auto curIdx = pluginObjs.size() - 1;
+      auto curObj = pluginObjs.back();
       pluginInfo = {
         pluginPath,
-        pluginObj->getId(),
-        pluginObj->getName(),
-        pluginObj->getVersion(),
-        pluginObj->getAuthor(),
-        pluginObj->getDescription()
+        curObj->getId(),
+        curObj->getName(),
+        curObj->getVersion(),
+        curObj->getAuthor(),
+        curObj->getDescription()
       };
       logger.info("Plugin created: id: {}, name: {}, version: {}, author: {}, description: {}", pluginInfo.id, pluginInfo.name, pluginInfo.version, pluginInfo.author, pluginInfo.description);
     }
@@ -78,10 +85,14 @@ bool PluginController::create()
 
 bool PluginController::run()
 {
-  if (pluginObj) {
+  if (pluginObjs.size()) {
     logger.info("Running plugin: {}", pluginInfo.name);
     // std::thread([this]() {
-      pluginObj->main(&context);
+    // 防止多次运行同一个对象
+    if (std::find(runningIdxes.begin(), runningIdxes.end(), pluginObjs.size() - 1) != runningIdxes.end())
+      return true; // 如果已经运行，则直接返回成功
+    pluginObjs.back()->main(&context);
+    runningIdxes.push_back(pluginObjs.size() - 1);
     // }).detach();
     return true;
   }
@@ -91,21 +102,39 @@ bool PluginController::run()
   }
 }
 
+bool PluginController::shutdown()
+{
+  if (runningIdxes.size())
+  {
+    for (auto& idx : runningIdxes)
+    {
+      bool result = pluginObjs[idx]->shutdown();
+      if (!result)
+      {
+        logger.info("Plugin cancel shutdown.");
+        return false; // 如果关闭失败（取消关闭），返回false
+      }
+      else
+      {
+        logger.info("Plugin shutdown successfully.");
+      }
+    }
+  }
+  return true;
+}
 bool PluginController::destroy()
 {
-  if (destroyPluginFunc && pluginObj) {
-    bool result = pluginObj->shutdown();
-    if (!result) {
-      logger.info("Plugin cancel shutdown.");
-      return false; // 如果关闭失败（取消关闭），返回false
-    }
+  if (destroyPluginFunc && pluginObjs.size())
+  {
     // 处理Qt事件，防止因提前卸载dll导致Qt事件机制报错
-    QCoreApplication::processEvents(); // 无效
-    destroyPluginFunc(pluginObj);
+    //QCoreApplication::processEvents(); // 无效
+    for (auto& obj : pluginObjs)
+      destroyPluginFunc(obj);
     logger.info("Plugin destroyed: {}", pluginInfo.name);
-    pluginObj = nullptr;
+    pluginObjs.clear();
   } else {
     logger.error("Destroy function not set or plugin is not created.");
+    return false; // 销毁失败
   }
   return true; // 成功销毁插件
 }

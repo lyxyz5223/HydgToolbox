@@ -10,11 +10,13 @@ PluginManager::PluginManager(const std::string &path)
 
 PluginManager::~PluginManager()
 {
-  // destroyPlugins();
+  //destroyPlugins();
 }
 
 void PluginManager::scanPlugins()
 {
+  pluginsMap.lock();
+  runningPluginsMap.lock();
   // 清空pluginsMap和runningPluginsMap
   pluginsMap.clear();
   runningPluginsMap.clear();
@@ -32,15 +34,13 @@ void PluginManager::scanPlugins()
       pluginFiles.push_back(entry.path().string());
     }
   }
+  runningPluginsMap.unlock();
+  pluginsMap.unlock();
 }
 
 void PluginManager::loadPlugins(const PluginContext& context)
 {
-  // 注释原因：在scanPlugins中调用
-  // 清空pluginsMap和runningPluginsMap
-  //pluginsMap.clear();
-  //runningPluginsMap.clear();
-
+  pluginsMap.lock();
   // 加载所有插件
   for (const auto &pluginFile : pluginFiles)
   {
@@ -53,10 +53,12 @@ void PluginManager::loadPlugins(const PluginContext& context)
     else
       logger.error("Failed to load plugin {}", pluginFile);
   }
+  pluginsMap.unlock();
 }
 
 void PluginManager::createPlugins()
 {
+  pluginsMap.lock();
   for (const auto &pair : pluginsMap)
   {
     if (pair.second->create())
@@ -64,10 +66,13 @@ void PluginManager::createPlugins()
     else
       logger.error("Failed to create plugin {}", pair.first);
   }
+  pluginsMap.unlock();
 }
 
 void PluginManager::runPlugins()
 {
+  pluginsMap.lock();
+  runningPluginsMap.lock();
   unsigned long long pluginCount = 0;
   unsigned long long successCount = 0;
   // 创建并运行插件
@@ -82,10 +87,13 @@ void PluginManager::runPlugins()
     pluginCount++;
   }
   logger.info("All {} plugins with {} successfully loaded, created and run", pluginCount, successCount);
+  runningPluginsMap.unlock();
+  pluginsMap.unlock();
 }
 
 void PluginManager::createPlugin(const std::string &pluginFile)
 {
+  pluginsMap.lock();
   if (pluginsMap.count(pluginFile)) {
     auto &pluginController = pluginsMap[pluginFile];
     if (pluginController->create()) {
@@ -94,55 +102,78 @@ void PluginManager::createPlugin(const std::string &pluginFile)
       logger.error("Failed to create plugin {}", pluginFile);
     }
   }
+  pluginsMap.unlock();
 }
 
 void PluginManager::runPlugin(const std::string &pluginFile)
 {
+  pluginsMap.lock();
+  runningPluginsMap.lock();
   if (pluginsMap.count(pluginFile)) {
     auto &pluginController = pluginsMap[pluginFile];
-    if (pluginController->create()) {
-      if (pluginController->run()) {
-        // 运行成功，将该插件添加进运行中的插件列表
-        runningPluginsMap[pluginFile] = pluginController;
-        logger.info("Plugin {} successfully created and run", pluginFile);
-      } else {
-        logger.error("Failed to run plugin {}", pluginFile);
-      }
+    if (pluginController->run()) {
+      // 运行成功，将该插件添加进运行中的插件列表
+      runningPluginsMap[pluginFile] = pluginController;
+      logger.info("Plugin {} successfully created and run", pluginFile);
     } else {
-      logger.error("Failed to create plugin {}", pluginFile);
+      logger.error("Failed to run plugin {}", pluginFile);
     }
   }
+  runningPluginsMap.unlock();
+  pluginsMap.unlock();
 }
 
 
 
-bool PluginManager::destroyPlugins()
+bool PluginManager::shutdownAndDestroyRunningPlugins()
 {
+  pluginsMap.lock();
+  runningPluginsMap.lock();
   // 销毁所有插件
   for (auto &pair : runningPluginsMap)
   {
-    bool result = pair.second->destroy();
+    bool result = pair.second->shutdown();
     if (!result)
     {
       logger.info("Plugin {} cancel shutdown, toolbox will not be closed.", pair.first);
+      runningPluginsMap.unlock();
+      pluginsMap.unlock();
       return false; // 如果有插件取消关闭，返回false
     }
-    pair.second.reset();
+    else {
+      result = pair.second->destroy();
+    }
   }
   runningPluginsMap.clear();
-  pluginsMap.clear();
-  logger.info("All plugins destroyed");
+  logger.info("All running plugins have been shut down and destroyed.");
+  runningPluginsMap.unlock();
+  pluginsMap.unlock();
   return true; // 成功销毁所有插件
 }
 
-
-std::vector<HydgPluginInfo> PluginManager::getPluginInfoList() const
+void PluginManager::destroyAllPlugins()
 {
+  pluginsMap.lock();
+  unsigned long long successCount = 0;
+  for (auto& pair : pluginsMap)
+  {
+    bool result = pair.second->destroy();
+    if (result)
+      successCount++;
+  }
+  logger.info("Destroy {} plugins with {} success.", pluginsMap.size(), successCount);
+  pluginsMap.unlock();
+}
+
+std::vector<HydgPluginInfo> PluginManager::getPluginInfoList()
+{
+  pluginsMap.lock();
   std::vector<HydgPluginInfo> infoList;
   for (const auto &pair : pluginsMap)
   {
     HydgPluginInfo info = pair.second->getInfo();
     infoList.push_back(info);
   }
+  pluginsMap.unlock();
   return infoList;
 }

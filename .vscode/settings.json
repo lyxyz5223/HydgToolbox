@@ -75,6 +75,7 @@
     "expected": "cpp",
     "regex": "cpp",
     "source_location": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "qdatetime": "cpp"
   }
 }

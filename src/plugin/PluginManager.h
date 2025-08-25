@@ -51,15 +51,22 @@ private:
   void runPlugin(const std::string &pluginFile);
 
   /**
-   * 销毁所有插件
-   * @return true表示成功销毁，false表示有插件取消shutdown
+   * 关闭所有插件
+   * @return true表示成功关闭，false表示有插件取消shutdown
    */
-  bool destroyPlugins();
+  bool shutdownAndDestroyRunningPlugins();
+
+  /**
+   * 销毁所有插件实例
+   */
+  void destroyAllPlugins();
+
   /**
    * 获取插件信息列表
+   * 注：请先调用createPlugin(s)函数创建插件实例
    * @return 插件信息列表的vector
    */
-  std::vector<HydgPluginInfo> getPluginInfoList() const;
+  std::vector<HydgPluginInfo> getPluginInfoList();
 
 private:
 };

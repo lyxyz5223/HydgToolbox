@@ -1,6 +1,6 @@
 #include "DesktopTimer.h"
 
-DesktopTimer::DesktopTimer(QWidget *parent, const PluginContext *context)
+DesktopTimer::DesktopTimer(QWidget *parent, const PluginContext *&context)
     : QMainWindow(parent), pluginContext(context)
 {
   setWindowTitle("Desktop Timer");

@@ -10,10 +10,11 @@ class DesktopTimer : public QMainWindow
 private:
   QLabel *timeLabel;
   QTimer *timer;
-  const PluginContext *pluginContext;
+  const PluginContext *&pluginContext;
 
 public:
-  DesktopTimer(QWidget *parent = nullptr, const PluginContext *context = nullptr);
+  // 这里采用指针的引用，保证与dllmain.cpp中的context指针一致
+  DesktopTimer(QWidget *parent, const PluginContext *&context);
   ~DesktopTimer();
 protected:
   void closeEvent(QCloseEvent *event) override;

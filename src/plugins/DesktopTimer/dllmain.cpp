@@ -7,14 +7,11 @@
 
 /** 
  * 此插件演示Qt窗口的正确创建方式
- * 整个主程序生命周期内只会存在一个相同插件的实例
- * 但是可能会多次调用main函数，
- * 所以千万不要在这个插件类中多次对同一对象多次赋值
  */
 class DesktopTimerPlugin : public HydgPlugin
 {
 private:
-  std::vector<DesktopTimer*> pluginWindows;
+  QWidget* pluginWindow;
   Logger logger{"DesktopTimerPlugin"};
   const PluginContext *pluginContext;
 
@@ -26,7 +23,7 @@ public:
   {
     this->pluginContext = context;
     // 测试事件总线
-    context->eventBus->subscribe("desktop_timer_event", "update_time", [](const char* publisherId, const char* eventName, const char* eventContent, void* userData) {
+    context->eventBus->subscribe(getId(), "update_time", [](const char* publisherId, const char* eventName, const char* eventContent, void* userData) {
       auto* plugin = static_cast<DesktopTimerPlugin*>(userData);
       if (plugin) {
         // 处理事件
@@ -36,22 +33,28 @@ public:
     }, this);
     // 插件主入口函数逻辑
     // 创建计时器主窗口
-    auto* pluginWindow = new DesktopTimer(nullptr, pluginContext);
-    pluginWindows.push_back(pluginWindow);
+    pluginWindow = new DesktopTimer(nullptr, pluginContext);
     pluginWindow->setParent(nullptr);
     // QMetaObject::invokeMethod(pluginWindow, "show", Qt::QueuedConnection);
     pluginWindow->show();
   }
-
+  
+  /**
+   * 关闭插件
+   * 注意：关闭后context将会失效，如继续使用将会导致未定义行为
+   */
   bool shutdown() override
   {
-    for (auto& pluginWindow : pluginWindows)
-      if (pluginWindow) {
-        pluginWindow->close();
-        // pluginWindow->deleteLater(); // 可能导致报错
-        delete pluginWindow; // 立即销毁
-        pluginWindow = nullptr;
-      }
+    if (pluginWindow) {
+      pluginWindow->close();
+      pluginWindow->deleteLater(); // 可能导致报错
+      // delete pluginWindow; // 立即销毁
+      // pluginWindow = nullptr;
+    }
+    // 取消订阅
+    pluginContext->eventBus->unsubscribe(getId(), "update_time");
+    // 修改context，防止继续使用
+    pluginContext = nullptr;
     return true;
   }
 
